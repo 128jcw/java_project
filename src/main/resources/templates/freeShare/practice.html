@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+<h1>Hello, Stranger</h1>
+<h2 id="main">hello,stranger</h2>
+
+<span onclick="output()">살인마 판독기</span>
+
+<img src="/files/40c26971-4ed7-42af-a10b-11c9d81a47d9_모자.jpg" usemap="#tamo" >
+<map name="tamo">
+    <area shape="rect" alt=".." coords="5 ,6,70,84" href="https://www.naver.com">
+</map>
+
+<script>
+ var isMurderer=false;
+ //isMurderer=true;
+ 
+ function murder(human){
+	 if(human==true){
+		 return '살인마다'
+	 }else{
+		 return '살인마가 아니다'
+	 }
+	 
+ }
+ 
+ function output(){
+	 console.log(murder(isMurderer));
+ }
+
+</script>
+</body>
+</html>

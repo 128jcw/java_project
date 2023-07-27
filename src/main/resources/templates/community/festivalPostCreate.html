@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_community }">
+
+    <div layout:fragment="content">
+        <div class="card my-2">
+            <div class="card-header">
+                <span style="font-size: 30px;">포스트 작성 페이지</span>
+                <a th:href="@{ /community/festivalPostList }" class="btn btn-primary" style="float :right;">취소하기</a>
+            </div>
+            <div class="card-body">
+                <form id="formbtn" method="post" enctype="multipart/form-data">
+                    <div class="my-2">
+                        <label for="title" class="form-label">제목</label>
+                        <input id="title" class="form-control" 
+                            type="text" name="title" required autofocus />
+                    </div>
+                    <div class="select_img">
+                        <input id="filePath" name="filePath" class="form-control" type="file" accept="image/*" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="content" class="form-label">내용</label>
+                        <textarea id="content" class="form-control"
+                            name="content" required></textarea>
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalArea" class="form-label">개최지역</label>
+                        <input id="festivalArea" class="form-control"
+                            name="festivalArea" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalPeriod" class="form-label">개최기간</label>
+                        <input id="festivalPeriod" class="form-control"
+                            name="festivalPeriod" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalCharacter" class="form-label">축제 성격</label>
+                        <input id="festivalCharacter" class="form-control"
+                            name="festivalCharacter" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalInfo" class="form-label">관련 누리집</label>
+                        <input id="festivalInfo" class="form-control"
+                            name="festivalInfo" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalPlace" class="form-label">축제 장소</label>
+                        <input id="festivalPlace" class="form-control"
+                            name="festivalPlace" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalPrice" class="form-label">요금</label>
+                        <input id="festivalPrice" class="form-control"
+                            name="festivalPrice" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalAgency" class="form-label">주최/주관기관</label>
+                        <input id="festivalAgency" class="form-control"
+                            name="festivalAgency" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalInquiry" class="form-label">문의</label>
+                        <input id="festivalInquiry" class="form-control"
+                            name="festivalInquiry" required />
+                    </div>
+                    <div class="my-2">
+                        <input type="submit" class="form-control btn btn-success" 
+                            value="작성 완료" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="image_road.js"></script>
+</html>

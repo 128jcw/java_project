@@ -1,0 +1,231 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_freeshare }">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+<style type="text/css">
+    .row {
+        padding: 5px;
+        border-collapse: collapse;
+        justify-content: center;
+    }
+    @font-face {
+        font-family: 'Tenada';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
+    *{
+       font-size : 100%;
+       font-family: 'Tenada';
+    }
+</style>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+    <nav class="navbar navbar-expand-lg bg-red">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse p-1" id="navbarSupportedContent" >
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                    <a id="menuList1" style="text-decoration:none; color: black; font-size:165%;" class="nav-link active" aria-current="page" th:href="@{/}">◎ 메인 페이지</a></li>
+                    <li class="nav-item">
+                    <a id="menuList2" style="text-decoration:none; color: black; font-size:165%;" class="nav-link active" aria-current="page" th:href="@{/freeshare/list}">◎ 전체 페이지</a></li>
+                    <li class="nav-item">
+                    <a id="menuList3" style="text-decoration:none; color: black; font-size:165%;" class="nav-link active" aria-current="page" th:href="@{/freeshare/free}">◎ 무료 상품</a></li>
+                    <li class="nav-item">
+                    <a id="menuList4" style="text-decoration:none; color: black; font-size:165%;" class="nav-link active" aria-current="page" th:href="@{/freeshare/today}">◎ 오늘 올라온 상품</a></li>
+                    <li class="nav-item">
+                    <a id="menuList5" style="text-decoration:none; color: black; font-size:140%;" class="nav-link active" th:href="@{/freeshare/create}">◎ 상품 등록</a></li>
+                  
+                </ul>
+            </div>
+        </div>
+    </nav>
+   
+
+    <div class="container" style="background-size: cover">
+        <div class="row wrap img-fluid">
+        
+            <form id="formModify" style="margin-top: 4px;" enctype="multipart/form-data" >
+                <div class="card row">
+                    
+                    <div class="card-header">
+                        <input id="id" name="id" class="form-control" type="hidden" th:value="${post.id}" />
+                        
+                        <div class="card" style="width: 20rem;">
+                            <img th:src="${post.filePath}"
+                                th:if="${post.filePath != null}"
+                                class="card-img-top card-img" name="imgFile"
+                                alt="..." />
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="my-2">
+                            <span>◎ </span><label for="title" class="form-label" style="font-size:150%; text-decoration: underline;"> 제목</label> 
+                            <input id="title" name="title" class="form-control" style="font-size:140%" th:value="${post.title}"  />
+                        </div>
+                        <div class="my-2">
+                            <span>◎ </span><label for="author" class="form-label" style="font-size:150%; text-decoration: underline;"> 담당자</label> 
+                            <input id="author" class="form-control" style="font-size:140%" th:value="${post.author}" readonly />
+                        </div>
+                        <div class="my-2">
+                            <span>◎ </span> <label for="content" class="form-label" style="font-size:150%; text-decoration: underline;"> 모집내용</label> 
+                            <textarea id="content" name="content" class="form-control" style="font-size:140%" th:text="${post.content}" ></textarea>
+                        </div>
+                        <div class="my-2">
+                            <span>◎ </span><label for="price" class="form-label" style="font-size:150%; text-decoration: underline;"> 가격</label> 
+                            <input type="text" maxlength="10" onkeyup="inputNumberFormat(this)" style="font-size:140%" name="price" id="price" class="form-control" th:value="${post.price}" />
+                        </div>
+                        <th:block>
+                            <div class="my-2" th:if="${post.transaction}==parcel">
+                                <span>◎ </span><label for="transaction" class="form-label" style="font-size:150%; text-decoration: underline;"> 거래방법</label> 
+                                <input id="transaction" class="form-control" value="택배가능" style="font-size:140%" readonly />
+                            </div>
+                            <div class="my-2" th:if="${post.transaction}==direct">
+                                <span>◎ </span><label for="transaction" class="form-label" style="font-size:150%; text-decoration: underline;">` 거래방법</label> 
+                                <input id="transaction" class="form-control" value="직접거래 가능" style="font-size:140%" readonly />
+                            </div>
+                            <div class="my-2" th:unless="${post.transaction}==direct or ${post.transaction}==parcel">
+                                <span>◎ </span><label for="transaction" class="form-label" style="font-size:150%; text-decoration: underline;"> 거래방법</label> 
+                                <input id="transaction" class="form-control" value="택배 가능, 직접거래 가능" style="font-size:140%" readonly />
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+                
+                <div class="my-2">
+                    <input class="btn btn-outline-primary" type="button" style="font-size:150%" onclick="updatePost()" value="수정완료" />
+                    <button class="btn btn-outline-danger" id="btnCancel" style="font-size:150%">취소</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<th:block script layout:fragment="script">
+    <script>
+    let click1 = document.getElementById("menuList1"); 
+    let click2 = document.getElementById("menuList2");
+    let click3 = document.getElementById("menuList3");
+    let click4 = document.getElementById("menuList4");
+    let click5 = document.getElementById("menuList5");
+    
+    click1.addEventListener("mouseover", function (event) {
+        event.target.style.color = "orange";
+      }, false);
+    click1.addEventListener("mouseout", function(event){
+        event.target.style.color = "black";
+      }, false)
+      
+    click2.addEventListener("mouseover", function (event) {
+        event.target.style.color = "orange";
+      }, false);
+    click2.addEventListener("mouseout", function(event){
+        event.target.style.color = "black";
+      }, false)
+      
+    click3.addEventListener("mouseover", function (event) {
+        event.target.style.color = "orange";
+      }, false);
+    click3.addEventListener("mouseout", function(event){
+        event.target.style.color = "black";
+      }, false)
+      
+    click4.addEventListener("mouseover", function (event) {
+        event.target.style.color = "orange";
+      }, false);
+    click4.addEventListener("mouseout", function(event){
+        event.target.style.color = "black";
+      }, false)
+      
+    click5.addEventListener("mouseover", function (event) {
+        event.target.style.color = "orange";
+      }, false);
+    click5.addEventListener("mouseout", function(event){
+        event.target.style.color = "black";
+      }, false)
+      
+    </script>
+    <script>
+    const btnCancel=document.querySelector('#btnCancel');
+    
+    function updatePost(seq){
+        Swal.fire({
+          title: '정말 수정하시겠습니까???',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '수정완료',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.value) {
+              //"삭제" 버튼을 눌렀을 때 작업할 내용을 이곳에 넣어주면 된다. 
+              formModify.action='/freeshare/modify';
+              formModify.method='post';
+              formModify.submit();
+          }
+        })
+    }
+    
+    btnCancel.addEventListener('click', function(){
+    	///freeshare/modify?id={id} (id = ${ post.id }) 
+    	formModify.action='/freeshare/detail?(id) id=${post.id}';
+        formModify.method='get';
+        formModify.submit();
+    });
+    </script>
+    <script type="text/javascript">
+    function comma(str) {
+        str = String(str);
+        return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+    }
+
+    function uncomma(str) {
+        str = String(str);
+        return str.replace(/[^\d]+/g, '');
+    } 
+    
+    function inputNumberFormat(obj) {
+        obj.value = comma(uncomma(obj.value));
+    }
+    
+    function inputOnlyNumberFormat(obj) {
+        obj.value = onlynumber(uncomma(obj.value));
+    }
+    
+    function onlynumber(str) {
+        str = String(str);
+        return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
+    }
+    
+    
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</th:block>
+</body>
+</html>

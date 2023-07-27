@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_post }">
+
+    
+<body>
+    <div layout:fragment="content">
+        <div class="m-4 row g-5">
+            <form id="formModify" method="post" style="margin-top: 4px;" enctype="multipart/form-data">
+                    <input id="id" name="id" class="form-control" th:value="${post.id}" type="hidden" multiple="multiple"/>
+                <!-- 이미지 및 제목 담당자 -->
+                <div class="card mb-3 m-4 g-5" >
+                    <div class="row g-0">
+                    <!-- style="width: 20rem; -->
+                        <div class="col-md-4" style="width: 300px; margin: 10px;">
+                            <img th:src="${post.filePath}"  class="card-img-top card-img" name="imgFile"/>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body" style="margin-top: 20px;">
+                                <div class="my-2" th:if="${ post.author } != ${ #authentication.name } and ${closeDateEnd} =='yes' " >
+                                    <h6 style="color:red;">모집기한이 지나 신청 불가능한 게시물입니다.</h6>
+                                </div>
+                                <div class="my-2" th:if="${ post.author } == ${ #authentication.name }" >
+                                    <h6>참가자: [[${ appliers }]]</h6>
+                                </div>
+            				<input  type="text" class="form-control-plaintext" style="border: none;"
+                                        name="category" th:value="${post.category}" readonly />
+                            <label for="title" class="col-sm-2 col-form-label" style="color: gray;">제목</label>
+                                <input style="font-size: 22px;" type="text" class="form-control-plaintext"
+                                        id="title" name="title" th:value="${post.title}" readonly />
+                            <div class="row" style="margin-top: 15px;">
+                            <label for="author"
+                                    class="col-2" style="margin-right: 5px; color: gray;" >담당자</label>
+                            <input  type="text" class="col-8" style="border:0 solid black"
+                                        id="author" name="author" th:value="${post.author}" readonly />
+                            </div>
+                            
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            <!-- 2번째 카드 content 모집내용 시작 -->
+            <div class="card m-4 g-5 ">
+                <label for="content" class="form-label" style="color: gray; margin-left: 25px; margin-top: 20px; margin-bottom: 20px;">모집내용</label>
+                    <div class="mx-4 mb-2">
+                        <textarea style="font-size: 22px;" id="content" name="content"
+                            class="form-control-plaintext" th:text="${post.content}" rows="20" readonly></textarea>
+                    </div>
+                </div>
+            <!-- 3번째 카드 -->
+            <div class="card m-4 row g-5" >
+                <div style="margin: 4px;">
+                <div class="mb-3 my-2 row">
+                    <label for="totalMember"
+                        class="col-sm-2 col-form-label">모집인원</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control-plaintext"
+                            id="totalMember" name="totalMember" th:value="${post.totalMember}" readonly/>
+                    </div>
+                    <label for="joinMember"
+                        class="col-sm-2 col-form-label">지원인원</label>
+                    <div class="col-sm-4">
+                        <input type="number"
+                            class="form-control-plaintext"
+                            id="joinMember" name="joinMember"
+                            th:value="${countMember}" readonly />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="meetingDate"
+                        class="col-sm-2 col-form-label">모임기간</label>
+                    <div class="col-sm-4">
+                        <input type="datetime-local" class="form-control-plaintext"
+                            id="meetingDate" name="meetingDate" th:value="${post.meetingDate}" readonly/>
+                    </div>
+                    <label for="closeDate"
+                        class="col-sm-2 col-form-label">신청마감</label>
+                    <div class="col-sm-4">
+                        <input type="datetime-local" class="form-control-plaintext"
+                            id="closeDate" name="closeDate" th:value="${post.closeDate}" readonly/>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="place" class="col-sm-2 col-form-label">장소</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control-plaintext"
+                            id="place" name="place" th:value="${post.place}" readonly/>
+                    </div>
+                </div>
+                <div class="card my-2" style="margin :5px; width: 99%;">
+                    <div id="map" style="width:100%;height:350px;" onclick="location.href='/map/main';"></div>
+                </div>
+                </div>
+                </div>
+                
+                
+                
+                <div class="mx-4 g-5" >
+                    <div class="my-2" th:if="${ post.author } == ${ #authentication.name }">
+                        <!-- 버튼 위치 -->
+                        <input class="btn btn-outline-danger" onclick="deletePost()" type="button" value="삭제"/>
+                        <a class="btn btn-outline-primary" th:if="${closeDateEnd}=='no'" th:href="@{ /post/modify?id={id} (id = ${ post.id }) }">수정</a>
+                    </div>
+                    
+
+                <!-- 신청 모달창 -->
+                    <div style="float: left;" class="my-2" th:if="${ post.author } != ${ #authentication.name } and ${ exist } == 'no' and ${ isFull }=='no' and ${closeDateEnd}=='no'" >
+                        <button type="button" id="btnJoin" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        신청
+                        </button>
+                    </div>
+                    <div style="float: left;" class="my-2" th:if="${ post.author } != ${ #authentication.name } and ${ exist } == 'no' and ${ isFull }=='yes' and ${closeDateEnd}=='no'" >
+                        <h6 style="color:red;">신청인원이 마감되었습니다.</h6>
+                    </div>
+                    <div style="float: left;" class="my-2" th:if="${ post.author } != ${ #authentication.name } and ${ exist } == 'yes' and ${closeDateEnd}=='no'" >
+                        <button type="button" id="btnNoJoin" class="btn btn-outline-danger">신청 취소</button>
+                    </div>
+                    <div style="float: left;" class="my-2" th:if="${closeDateEnd}=='yes'" >
+                        <h6 style="color:red;">기한이 지나 신청이 불가능합니다.</h6>
+                    </div>
+                
+                <!-- 좋아요기능 -->
+                    <!-- 빈책갈피 -->
+                    <div style="float: right;" class="my-2" th:if="${ post.author } != ${ #authentication.name } and ${closeDateEnd}=='no' and ${likecheck} == 'no'" >
+                        <button type="button" style="border: none; background-color: white;" id="likeBtn" >
+                            <svg style="color:darkorange;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
+                              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- 채워진 책갈피 -->
+                    <div style="float: right;" class="my-2" th:if="${ post.author } != ${ #authentication.name } and ${closeDateEnd}=='no' and ${likecheck} == 'yes'" >
+                        <button type="button" style="border: none; background-color: white;" id="cancelLikeBtn">
+                            <svg style="color:darkorange;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
+                              <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" id="username" name="username" th:value="${ #authentication.name }" readonly/>
+                
+                
+                
+                <div id="showModal"></div>
+
+                <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="applyModalLabel">참가신청</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                  
+                  <div class="modal-body row">
+                  <!-- 신청글 제목 -->
+                 <label for="title" class="col-sm-2 col-form-label">제목 </label>
+                  <div class="col-sm-9">      
+                  <input type="text" id="modalApplyTitle" class="form-control-plaintext " th:value="${post.title}" readonly/>
+                  </div>
+                  <!-- 모임날짜 -->
+                  <label for="meetingDate" class="col-sm-2 col-form-label">모임기간</label>
+                  <div class="col-sm-9">
+                    <input type="datetime-local" class="form-control-plaintext" 
+                    th:value="${post.meetingDate}"  id="modalMeetingDate" name="meetingDate" readonly/> 
+                  </div>                                 
+                  <!-- 신청자 아이디 삽입 -->
+                    <input type="hidden" id="joinNickname" name="joinNickname" th:value="${ #authentication.name }" readonly/>
+                  </div>
+                  
+                  
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="btnApplyJoin">신청하기</button>
+                  </div>
+                </div>
+                </div>
+                </div>
+            </form>
+        </div>
+        <!-- 메인 div 끝 -->
+        
+        <hr style="margin-right: 50px; margin-left: 50px;"/>
+        <div class="card my-4 g-5" style="margin: 60px; border: none;">
+            <div class="col-4">
+                    <!-- 로그인 아이디로 댓글 작성자 아이디를 자동 삽입. readonly -->
+                    <input type="hidden" class="form-control-plaintext" id="writer" 
+                        th:value="${ #authentication.name }" readonly />
+            </div>
+            <div class="card-body row">
+                <div class="col-10">
+                    <textarea class="form-control" id="replyText" placeholder="댓글 작성"></textarea>
+                </div>
+                <div class="col-2">
+                    <button style="margin-top: 20px;" class="btn btn-outline-secondary" id="btnReplyRegister">등록</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 댓글 리스트 영역 -->
+        <div id="replies" style="margin-right: 60px; margin-left: 60px;"></div>
+
+        <!-- 댓글 수정/삭제 Modal -->
+        <div class="modal fade" id="replyModal" tabindex="-1"
+            aria-labelledby="replyModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="replyModalLabel">댓글 수정</h1>
+                        <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 댓글 아이디 삽입 위치 -->
+                        <input type="hidden" id="modalReplyId" readonly />
+                        <!-- 댓글 내용 삽입 위치 -->
+                        <textarea id="modalReplyText" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">취소</button>
+                        <button type="button" id="modalBtnDelete"
+                            class="btn btn-outline-danger">삭제</button>
+                        <button type="button" id="modalBtnUpdate"
+                            class="btn btn-outline-success">수정 완료</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+    </div>
+   </body> 
+     
+    <th:block layout:fragment="script">
+        <!-- Ajax를 사용하기 위한 axios 자바스크립트 라이브러리 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script th:inline="javascript">
+            // 타임리프 inline 기능을 이용하면 자바스크립트 안에서 타입리프 속성을 이용할 수 있음.
+            // 로그인 사용자 아이디를 자바스크립트 변수에 저장.
+            const loginUser = [[ ${ #authentication.name } ]];
+        </script>
+        <!-- 댓글 관련 자바스크립트 함수/코드들을 작성한 스크립트 파일 -->
+        <script th:src="@{ /js/recruitPostReply.js }"></script>
+        <script th:src="@{ /js/joinModal.js }"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=46230589923a495a6f716d809a12db77"></script>
+
+		<script th:inline="javascript">
+		var adrList = [[ ${ post } ]]
+		var markerPosition  = new kakao.maps.LatLng(adrList.lat, adrList.lng); 
+		var marker = {
+		    position: markerPosition,
+		    text: '지도를 누르면 모임지도 페이지로 이동합니다!'
+		};
+		
+		var staticMapContainer  = document.getElementById('map'), // 이미지 지도를 표시할 div  
+		    staticMapOption = { 
+		        center: new kakao.maps.LatLng(adrList.lat, adrList.lng), // 이미지 지도의 중심좌표
+		        level: 3, // 이미지 지도의 확대 레벨
+		        marker: marker // 이미지 지도에 표시할 마커 
+		    };    
+		var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+		</script>
+        
+        <script>
+        function deletePost(seq) {
+            Swal.fire({
+                title: '삭제하시겠습니까?',
+                showCancelButton: true,
+                confirmButtonColor: 'red',
+                cancelButtonColor: 'gray',
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소'
+              }).then((result) => {
+                if (result.value) {
+                   formModify.action='/post/delete';
+                    formModify.method='post';
+                    formModify.submit();
+                }
+              })
+        }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script th:src="@{ /js/likecount.js }"></script>
+    </th:block>
+</html>

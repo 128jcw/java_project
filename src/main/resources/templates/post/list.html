@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_post }">
+<!--/* layout/layout.html 파일의 "content" 프래그먼트에 삽입될 컨텐트 */-->
+<body>
+<div layout:fragment="content">
+    <div class="card my-2 mt-3 row border border-white">
+        <div class="card-header bg-white container-fluid border-white">
+            <h1 class="mt-4" style="float:left;"> 모집 목록 </h1>
+         <form th:action="@{ /post/search }">
+         <div class="row mt-4" style="float:right;">
+             <div class="col-3">
+                 <select name="type" class="form-control" >
+                     <option value="t">제목</option>
+                     <option value="c">내용</option>
+                     <option value="tc">제목+내용</option>
+                     <option value="a">작성자</option>
+                     <option value="category">카테고리</option>
+                 </select>
+             </div>
+             <div class="col-6" >
+                 <input type="text" name="keyword" class="form-control" placeholder="검색어" autofocus />
+             </div>
+             <div class="col-2" >
+                 <input type="submit" value="검색" class="btn btn-outline-warning" />
+             </div>
+        </div>
+             </form>
+        <div style="float:right; margin-right: 10px; display: flex; margin-top: 30px; font-size:20px;">
+            <ul style="list-style: none;">
+                <li style="float: left;" >
+                    <a id="newPost" style=" text-decoration-line: none; color: black;" th:href="@{ /post/create }" >새글작성</a>
+                </li>
+            </ul>
+            <ul style="list-style: none; margin-right: 30px;">
+                <li style="float: left; "><a id="totalList" style="text-decoration-line: none; color: black;" th:href="@{ /post/list }">전체목록</a></li>
+            </ul>
+        </div>
+        </div>
+        <hr/>
+        <!-- gx-4 row-cols-2 row-cols-md-3 : class에서 제거 -->
+        <div class="row gx-lg-5 row-cols-xl-5 justify-content-center">
+<!--             <div class="col" th:each="post , loop : ${paging}"> -->
+            <div class="col" th:each="post, loop: ${paging}">
+                <div class="my-5 card shadow" style="height: 80%">
+                    <!-- image-->
+                    <img th:src="${post.filePath}"  class="card-img-top" style="height: 170px;" name="imgFile" />
+                    <!-- details-->
+                    <div class="card-body"  style="padding-bottom: 0px;">
+                        <div class="text-center">
+                            <h4 th:text="${post.id}" class="d-none"></h4>
+                            <h4 class="fw-bolder" ><a
+                            th:href="@{ /post/detail?id={id} (id = ${post.id}) }" th:text="${post.title}" style="text-decoration:none; color: black;"></a></h4>
+                            <h6 th:text="${post.author}"></h6>
+                            <h6 th:text="${ #temporals.format(post.meetingDate, 'yyyy-MM-dd HH:mm') }" style="margin-bottom: 0px;"></h6>
+                            <h6 th:text="${ post.category}"></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer col" style="border-top: none; padding-top:0px; padding-bottom:0px; background-color: white;">
+                        <h6 style="float: right; font-size:13px; margin-right:4px; padding-left: 4px; margin-top: 6px;" th:text="${post.viewcount}">조회수</h6>
+                        <svg style="float: right; margin-top: 4px; " xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+
+                    </div>
+               </div>
+            </div>
+        </div>
+    </div>
+
+<!-- 페이징 -->
+<div th:if="${!paging.isEmpty()}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+            <a class="page-link" th:href="@{\?page=${paging.number-1}|}" >
+                <span>이전</span>
+            </a>
+        </li>
+        <li th:each="page : ${#numbers.sequence(0, paging.totalPages-1)}" 
+            th:classappend="${page == paging.number} ? 'active'" 
+            class="page-item" >
+            <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+        </li>
+        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+            <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                <span>다음</span>
+            </a>
+        </li>
+    </ul>
+</div>
+    </div>
+<th:block layout:fragment="script">
+    <script>
+    const newPost = document.getElementById("newPost");
+    const totalList = document.getElementById("totalList");
+    
+    newPost.addEventListener("mouseover", function(event) {
+    	event.target.style.color = "orange";}, false);
+    newPost.addEventListener("mouseout", function(event) {
+        event.target.style.color = "black";}, false);    
+    totalList.addEventListener("mouseover", function(event) {
+        event.target.style.color = "orange";}, false);
+    totalList.addEventListener("mouseout", function(event) {
+        event.target.style.color = "black";}, false);    
+    
+    </script>
+   </th:block>
+</body>
+</html>

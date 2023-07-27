@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_reviewPost }">
+<body>
+    <div layout:fragment="content">
+        <div>
+                <h4 style="margin-right: 50px; margin-left: 50px; margin-top: 50px;">모임 후기</h4>
+                <br/><br/>
+                
+            <form id="formModify" method="post" style="margin-top: 3px;">
+            <input id="id" name="id" class="form-control" th:value="${post.id}" type="hidden" />
+                <div class="mb-3 " style="margin-right: 50px; margin-left: 50px">
+                    <div class="card" style="padding:5px; border:none;">
+                        <input style="font-size: 40px; height: 55px; padding: 0px;" th:value="${post.title}" name="title" type="text" class="form-control-plaintext" readonly/>
+                        <div class="form-group row">
+                            <div class="col-1">
+                                <input style="padding:0px; font-size: 15px;" th:value="${post.author}" name="author" type="text" class="form-control-plaintext " readonly/>
+                            </div>
+                            <div class="col-3">
+                                <h3 style="margin:0px; margin-top:3px; padding:0px; font-size: 15px; color: gray;"> 작성시간:  <span style="color:black;" th:text="${ #temporals.format(post.createdTime, 'yyyy-MM-dd HH:mm:ss') }"></span></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <br/> 
+                    <div class="card" style="padding:5px; border:2px solid;">
+                        <div class="form-group row">
+                            <div class="col-10">
+                                <label style="color:gray; font-size: 15px;">모임명</label>
+                                <input th:value="${post.activity}" name="activity" class="form-control-plaintext" type="text" readonly/>
+                            </div>
+                            <div class="col-2">
+                                <label style="color:gray; font-size: 15px;">모임장</label>
+                                <input th:value="${post.organizer}" name="organizer" class="form-control-plaintext" type="text" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="card" style="padding:5px; border:none;">
+                        <textarea th:text="${post.content}" name="content" class="form-control-plaintext" rows="20" readonly></textarea>
+                    </div>
+                    <div style="margin-top: 20px; " th:if="${ post.author } == ${ #authentication.name }">
+                        <input class="btn btn-outline-danger" onclick="deletePost()" type="button" value="삭제"/>
+                        <a class="btn btn-outline-primary" th:href="@{ /reviewPost/modify?id={id} (id = ${ post.id }) }">수정</a>
+                    </div>
+                    <br/><br/><br/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<th:block layout:fragment="script">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:inline="javascript">
+    // 타임리프 inline 기능을 이용하면 자바스크립트 안에서 타입리프 속성을 이용할 수 있음.
+    // 로그인 사용자 아이디를 자바스크립트 변수에 저장.
+    const loginUser = [[ ${ #authentication.name } ]];
+    </script>
+    <script>
+    function deletePost(seq) {
+        Swal.fire({
+            title: '삭제하시겠습니까?',
+            showCancelButton: true,
+            confirmButtonColor: 'red',
+            cancelButtonColor: 'gray',
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소'
+          }).then((result) => {
+            if (result.value) {
+               formModify.action='/reviewPost/delete';
+                formModify.method='post';
+                formModify.submit();
+            }
+          })
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</th:block>
+</body>
+</html>

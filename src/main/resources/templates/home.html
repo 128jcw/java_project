@@ -1,0 +1,255 @@
+<!doctype html>
+<html 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>같은 취향을 가진 사람들의 가치</title>
+<link rel="icon" type="image/x-icon" th:href="@{ /assets/favicon_1.ico }" />
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+    crossorigin="anonymous">
+
+    <style>
+    @font-face {
+        font-family: 'Tenada';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+    }
+    *{
+       font-family: 'Tenada';
+    }
+    .latest-slider-tb .slider-img img.displayed {
+        display: block;
+        margin-left: auto;
+        margin-right: auto 
+    }
+    </style>
+</head>
+
+<body>
+<!-- nav bar  -->
+<nav class="navbar navbar-light bg-dark">
+    <div class="container-fluid row">
+        <div class="bg-dark">
+            <div class="ml-5">
+                <svg style="margin-left: 30px;" id="Layer_1" width="150" height="150" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 481.49 228.55">
+                    <defs><style>.cls-1{fill:#fd9409;}.cls-2{fill:none;stroke:#fd9409;stroke-miterlimit:10;stroke-width:20px;}.cls-3{fill:#f3ad14;}</style></defs>
+                    <path class="cls-1" d="M103.12,70.23q-2.91.3-2.91-2.91V53.5a2.57,2.57,0,0,1,2.91-2.91,105,105,0,0,0,14-1.46A56.83,56.83,0,0,0,129,45.86a34.36,34.36,0,0,0,8.66-5,14.76,14.76,0,0,0,4.8-6.48H100.94A2.57,2.57,0,0,1,98,31.52V18.13a2.57,2.57,0,0,1,2.91-2.91h67.67q3.06,0,3.06,3.06V28a32.42,32.42,0,0,1-3.06,14.41,34.87,34.87,0,0,1-8.22,10.84,47.91,47.91,0,0,1-12,7.71A86.82,86.82,0,0,1,134,66.09,115.71,115.71,0,0,1,118.4,69Q110.39,69.94,103.12,70.23Zm26.63,28.24h74.37a2.57,2.57,0,0,1,2.91,2.91v6a2.57,2.57,0,0,1-2.91,2.91H129.75v6.4h76.7a2.57,2.57,0,0,1,2.91,2.91v9.32a2.57,2.57,0,0,1-2.91,2.91H105.16a2.57,2.57,0,0,1-2.91-2.91V80.42a2.57,2.57,0,0,1,2.91-2.91h100a2.57,2.57,0,0,1,2.91,2.91V89.3a2.57,2.57,0,0,1-2.91,2.91H129.75Zm54.43-28.38c-2,0-3.05-1-3.05-2.91V16.82a2.7,2.7,0,0,1,3.05-3.05H205q3.06,0,3.06,3.05V29.05h6.84c1.94,0,2.91,1,2.91,3.05V49.28a2.57,2.57,0,0,1-2.91,2.91h-6.84v15q0,2.91-3.06,2.91Z"/><path class="cls-1" d="M228.13,104.58q-3,0-3-3.2V88.14c0-1.94,1-2.92,3-2.92h45q10.77,0,21-.87a73,73,0,0,0,18.34-3.78V16.82q0-3,3.06-3.05h20.81a2.7,2.7,0,0,1,3.05,3.05V129.61c0,1.94-1,2.91-3.05,2.91H315.46q-3.06,0-3.06-2.91V97.45a67.16,67.16,0,0,1-14.92,4.66,135.43,135.43,0,0,1-19,2.33v25a2.57,2.57,0,0,1-2.91,2.91h-19.5a2.57,2.57,0,0,1-2.91-2.91V104.58Zm2-82.08q0-2.91,3.06-2.91h19.94V12.46c0-2,1-3.06,3.05-3.06h20.09q3.19,0,3.2,3.06v7.13h18.92c2,0,3.05,1,3.05,2.91V35.16c0,1.94-1,2.91-3.05,2.91H281.25L255.79,74.89a3.51,3.51,0,0,1-3.64,2.33H231a2.71,2.71,0,0,1-2.4-1,2.51,2.51,0,0,1,.08-2.54l24-35.66h-19.5q-3.06,0-3.06-2.91Zm50.07,53.85a4,4,0,0,1-2.19-.66A6.14,6.14,0,0,1,276.31,74l-6-8.3a3,3,0,0,1,0-3.93L279.8,48q1.89-2.76,3.93,0l17.9,24.88a2.4,2.4,0,0,1,.58,2.41,2,2,0,0,1-2,1.09Z"/><path class="cls-2" d="M401.88,107.06a50.17,50.17,0,1,0,23.6-96.25h0c0,114.73-93,207.74-207.74,207.74S10,125.54,10,10.81"/>
+                    <path class="cls-3" d="M124.71,58.05c3.21,0,3.22-5,0-5s-3.23,5,0,5Z"/>
+                </svg>
+                <div class="" style="width:230px; height:150px; float: right; margin-top: 50px; margin-right: 30px;">
+                    <th:block sec:authorize="isAnonymous()">
+                        <div><a style="text-decoration:none; color: orange; font-size:160%;" th:href="@{ /login }">◎ 로그인</a></div>
+                        <div><a style="text-decoration:none; color: orange; font-size:160%;" th:href="@{/member/signup}">◎ 회원가입</a></div>
+                    </th:block>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div><a style="text-decoration:none; color: orange; font-size:160%;" th:href="@{ /member/mypage }">◎ 마이페이지</a></div>
+                        <div><a style="text-decoration:none; color: orange; font-size:160%;" th:href="@{ /logout }"> ◎ [[ ${#authentication.name} ]] 로그아웃</a></div>
+                    </th:block>
+                </div>
+            </div>
+            <div class="mx-3">
+                <span style="color: #FBECD8; font-size:145%;">'같'은 '취'향을 가진 </span>
+            </div>
+            <div class="mx-3">
+                <span style="color: #FBECD8; font-size:145%;"> 사람들의 '가치'</span>
+            </div>
+        </div>
+    </div>    
+</nav><!-- nav bar끝부분 -->
+
+<!-- 이미지 슬라이드.-->
+<div id="carouselExampleDark" class="latest-slider-tb carousel carousel-dark slide" data-bs-ride="carousel" >
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner slider-img">
+    <div class="carousel-item active" data-bs-interval="1900">
+        <a href="/post/list">
+            <img src="/cardImg/cardImg1-1.gif" class="img-responsive displayed d-block" alt="..." >
+        </a>
+      <div class="carousel-caption d-none d-md-block">
+      </div>
+    </div>
+    <div class="carousel-item" data-bs-interval="1900">
+        <a href="/map/main">
+            <img src="/cardImg/cardImg2-2.gif" class="img-responsive displayed d-block" alt="...">
+        </a>
+      <div class="carousel-caption d-none d-md-block">
+      </div>
+    </div>
+    <div class="carousel-item" data-bs-interval="1900">
+        <a href="/freeshare/list">
+            <img src="/cardImg/cardImg3.gif" class="img-responsive displayed d-block" alt="...">
+        </a>
+      <div class="carousel-caption d-none d-md-block"></div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>  <!-- 이미지 슬라이드 끝 -->
+
+
+<br/>
+<!-- content가 들어가는 부분.. -->
+<div class="container-marketing mx-5">
+        <div class="row text-center my-5">
+            <div class="col-4">
+             
+                 <a style="text-decoration-line: none; color: black;" th:href="@{ /post/list }"> <svg xmlns="http://www.w3.org/2000/svg" width="65" height="66" fill="currentColor" class="bi bi-cup-fill" viewBox="0 0 16 16" >
+                    <path fill-rule="evenodd" d="M.11 3.187A.5.5 0 0 1 .5 3h13a.5.5 0 0 1 .488.608l-.22.991a3.001 3.001 0 0 1-1.3 5.854l-.132.59A2.5 2.5 0 0 1 9.896 13H4.104a2.5 2.5 0 0 1-2.44-1.958L.012 3.608a.5.5 0 0 1 .098-.42Zm12.574 6.288a2 2 0 0 0 .866-3.899l-.866 3.9Z"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                </svg>
+                </a>
+                <h2 class="fw-normal my-3"><mark><strong>'취향'</strong></mark></h2>
+                <p>
+                    <a id="menuList1" class="btn btn-primary" th:href="@{ /post/list }">참여하러가기</a>
+                </p>
+            </div>
+            <div class="col-4">
+                <a style="text-decoration-line: none; color: black;" th:href="@{/freeshare/list}"><svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-box2-heart-fill" viewBox="0 0 16 16">
+                    <path d="M3.75 0a1 1 0 0 0-.8.4L.1 4.2a.5.5 0 0 0-.1.3V15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4.5a.5.5 0 0 0-.1-.3L13.05.4a1 1 0 0 0-.8-.4h-8.5ZM8.5 4h6l.5.667V5H1v-.333L1.5 4h6V1h1v3ZM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+                </svg>
+                </a>
+                <h2 class="fw-normal my-3"><mark><strong>'나눔'</strong></mark></h2>
+                <p>
+                    <a id="menuList2" class="btn btn-primary" th:href="@{/freeshare/list}">참여하러가기</a>
+                </p>
+            </div>
+            <div class="col-4">
+            <a  style="text-decoration-line: none; color: black;" th:href="@{/community/festivalPostList}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-unity" viewBox="0 0 16 16">
+                    <path d="M15 11.2V3.733L8.61 0v2.867l2.503 1.466c.099.067.099.2 0 .234L8.148 6.3c-.099.067-.197.033-.263 0L4.92 4.567c-.099-.034-.099-.2 0-.234l2.504-1.466V0L1 3.733V11.2v-.033.033l2.438-1.433V6.833c0-.1.131-.166.197-.133L6.6 8.433c.099.067.132.134.132.234v3.466c0 .1-.132.167-.198.134L4.031 10.8l-2.438 1.433L7.983 16l6.391-3.733-2.438-1.434L9.434 12.3c-.099.067-.198 0-.198-.133V8.7c0-.1.066-.2.132-.233l2.965-1.734c.099-.066.197 0 .197.134V9.8L15 11.2Z"/>
+                </svg>
+                </a>
+                <h2 class="fw-normal my-3"><mark><strong>'축제'</strong></mark></h2>
+                <p>
+                    <a id="menuList3" class="btn btn-primary" th:href="@{/community/festivalPostList}">참여하러가기</a>
+                </p>
+            </div>
+        </div>
+
+		<hr/><br/>
+        <h2 style="justify-content: center; display: flex;">좋아요/인기 급상승 게시글</h2>
+        <div class="text-center my-5" style="justify-content: center; display: flex;">
+                <div class="card" style="height: 80%; padding:0; width: 14%; margin-right: 10px;">
+                    <!-- image-->
+                    <img th:src="${bestLikecountPost.filePath}"  class="card-img-top" style="height: 170px;" name="imgFile" />
+                    <!-- details-->
+                    <div class="card-body"  style="padding-bottom: 0px;">
+                        <div class="text-center">
+                            <h4 th:text="${bestLikecountPost.id}" class="d-none"></h4>
+                            <h4 class="fw-bolder" ><a
+                            th:href="@{ /post/detail?id={id} (id = ${bestLikecountPost.id}) }" th:text="${bestLikecountPost.title}" style="text-decoration:none; color: black;"></a></h4>
+                            <h6 th:text="${bestLikecountPost.author}"></h6>
+                            <h6 th:text="${ #temporals.format(bestLikecountPost.meetingDate, 'yyyy-MM-dd HH:mm') }" style="margin-bottom: 0px;"></h6>
+                            <h6 th:text="${ bestLikecountPost.category}"></h6>
+                        </div>
+                        
+                    </div>
+                    <div class="card-footer col" style="border-top: none; background-color: white;">
+                        <h6 style="float: right; font-size:13px; padding-left: 4px; margin-top: 2px;" th:text="${bestLikecountPost.viewcount}">조회수</h6>
+                        <svg style="float: right;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    </div>
+               </div>
+                <div class="card" style="height: 80%; padding:0; width: 14%; margin-left: 10px;">
+                    <!-- image-->
+                    <img th:src="${bestViewcountPost.filePath}"  class="card-img-top" style="height: 170px;" name="imgFile" />
+                    <!-- details-->
+                    <div class="card-body"  style="padding-bottom: 0px;">
+                        <div class="text-center">
+                            <h4 th:text="${bestViewcountPost.id}" class="d-none"></h4>
+                            <h4 class="fw-bolder" ><a
+                            th:href="@{ /post/detail?id={id} (id = ${bestViewcountPost.id}) }" th:text="${bestViewcountPost.title}" style="text-decoration:none; color: black;"></a></h4>
+                            <h6 th:text="${bestViewcountPost.author}"></h6>
+                            <h6 th:text="${ #temporals.format(bestViewcountPost.meetingDate, 'yyyy-MM-dd HH:mm') }" style="margin-bottom: 0px;"></h6>
+                            <h6 th:text="${ bestViewcountPost.category}"></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer col" style="border-top: none; background-color: white;">
+                        <h6 style="float: right; font-size:13px; padding-left: 4px; margin-top: 2px;" th:text="${bestViewcountPost.viewcount}">조회수</h6>
+                        <svg style="float: right;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    </div>
+               </div>
+            </div>
+        
+</div><!-- div-class:container-marketing끝부분.. -->
+
+<!-- footer -->
+<div class="container-fluid p-3" id="footerStyle" style="background-color: black;">
+        <div class="mx-2 font-face" style="color:orange;">
+            <ul style="list-style: none; font-size:80%;">
+            <strong style="font-size:155%;">㈜ project 같취 </strong>
+                <li> ☞취미 POST 담당/배너,로고 제작 : <span>김가영(조장)</span>
+                </li>
+                <li> ☞DB 구성 및 백엔드 총괄 : <span>정찬웅</span>
+                </li>
+                <li> ☞공공축제 POST 담당 : <span>김다훈</span>
+                </li>
+                <li> ☞무료나눔 POST 담당 : <span>김준오</span>
+                </li>
+                <li> ☞지도 기능 담당 : <span>윤재만</span>
+                </li>
+                <br>
+                <li> Copyright ⓒ 2022 ㈜같취. All Rights Reserved
+                </li>
+                <li> 주소: 서울특별시 강남구 테헤란로 124, 4F(역삼동, 삼원타워) [같취] Team | 대표번호 : 02-1234-5678 | 문의 : ValuableThing@together.com
+                </li>
+            </ul>
+        </div>
+</div>
+
+<script>
+      
+    menuEvent1.addEventListener("mouseover", function (event) {
+      event.target.style.color = "orange";
+    }, false);
+    menuEvent1.addEventListener("mouseout", function(event){
+      event.target.style.color = "white";
+    }, false)
+    
+    menuEvent2.addEventListener("mouseover", function (event) {
+      event.target.style.color = "orange";
+    }, false);
+    menuEvent2.addEventListener("mouseout", function(event){
+      event.target.style.color = "white";
+    }, false)
+    
+    menuEvent3.addEventListener("mouseover", function (event) {
+      event.target.style.color = "orange";
+    }, false);
+    menuEvent3.addEventListener("mouseout", function(event){
+      event.target.style.color = "white";
+    }, false)
+        
+</script>
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous">
+</script>
+    
+</body>
+</html>

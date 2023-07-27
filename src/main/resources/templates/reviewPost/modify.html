@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_reviewPost }">
+<body>
+    <div layout:fragment="content">
+        <div>
+                <h4 style="margin-right: 50px; margin-left: 50px; margin-top: 50px;">모임 후기</h4>
+                <br/><br/>
+                
+            <form id="formModify" style="margin-top: 3px;">
+            <input id="id" name="id" class="form-control" th:value="${post.id}" type="hidden" />
+                <div class="mb-3 " style="margin-right: 50px; margin-left: 50px">
+                    <input id="title" name="title" type="text" class="form-control"  required autofocus th:value="${post.title}" />
+                    <input name="author" type="hidden" class="form-control-plaintext"  th:value="${ #authentication.name }" readonly required/>
+                    <br/> 
+                        <div class="form-group row">
+                            <div class="col-10">
+                                <label style="color:gray; font-size: 15px;">모임명</label> 
+                                <input id="activity" th:value="${post.activity}" name="activity" class="form-control" type="text" required/>
+                            </div>
+                            <div class="col-2">
+                                <label style="color:gray; font-size: 15px;">모임장</label>
+                                <input id="organizer" th:value="${post.organizer}" name="organizer" class="form-control" type="text" required/>
+                            </div>
+                        </div>
+                    <br/><br/>
+                    <textarea id="content" th:text="${post.content}" name="content" class="form-control" rows="20" required></textarea>
+                    <div style="margin-top: 20px; " th:if="${ post.author } == ${ #authentication.name }">
+                        <input class="btn btn-outline-danger" onclick="deletePost()" type="button" value="삭제"/>
+                        <input class="btn btn-outline-primary" type="button" value="수정" onclick="updatePost()" />
+                    </div>
+                    <br/><br/><br/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<th:block layout:fragment="script">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+    function deletePost(seq) {
+        Swal.fire({
+            title: '삭제하시겠습니까?',
+            showCancelButton: true,
+            confirmButtonColor: 'red',
+            cancelButtonColor: 'gray',
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소'
+          }).then((result) => {
+            if (result.value) {
+               formModify.action='/reviewPost/delete';
+                formModify.method='post';
+                formModify.submit();
+            }
+          })
+    }
+    function updatePost(seq) {
+        const title = document.querySelector('#title').value;
+        const content = document.querySelector('#content').value;
+        const activity = document.querySelector('#activity').value;
+        const organizer = document.querySelector('#organizer').value;
+        if(title == '' || content == '' || activity =='' || organizer=='') {
+            alert('제목과 내용을 입력하세요')
+            return;
+        }
+            Swal.fire({
+                title: '수정하시겠습니까?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: 'gray',
+                confirmButtonText: '수정완료',
+                cancelButtonText: '취소'
+            }).then((result) => {
+            if(result.value) {
+                formModify.action='/reviewPost/update';
+                formModify.method='post';
+                formModify.submit();
+                }
+            })
+    }
+    </script>
+</th:block>
+</body>
+</html>

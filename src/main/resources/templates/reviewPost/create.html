@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_reviewPost }">
+<body>
+    <div layout:fragment="content">
+        <div>
+                <h4 style="margin-right: 50px; margin-left: 50px; margin-top: 50px;">후기 작성</h4>
+                <h6 style="margin-right: 50px; margin-left: 50px; color:gray;">모임에 대한 간단한 평을 남겨주세요</h6>
+                <br/><br/>
+                
+            <form method="post" style="margin-top: 3px;">
+                <div class="mb-3 " style="margin-right: 50px; margin-left: 50px">
+                    <input name="title" type="text" class="form-control"  required autofocus placeholder="제목을 입력하세요"/>
+                    <input name="author" type="hidden" class="form-control-plaintext"  th:value="${ #authentication.name }" readonly required/>
+                    <br/>
+                    <div class="form-group row">
+                        <div class="col-10">
+                            <label style="color:gray; font-size: 15px;">모임명</label>
+                            <input name="activity" class="form-control" type="text" placeholder="참여한 모임 이름 or 링크 첨부" />
+                        </div>
+                        <div class="col-2">
+                            <label style="color:gray; font-size: 15px;">모임장</label>
+                            <input name="organizer" class="form-control" type="text" placeholder="모임장"/>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <textarea name="content" class="form-control" rows="20" placeholder="모임에 대한 간단한 후기를 작성해주세요." ></textarea>
+                    <div style="margin-top: 20px;">
+                           <input style="width: 100px;" type="submit" value="작성 완료"
+                                class="form-control btn btn-outline-primary" />
+                    </div>
+                    <br/><br/><br/>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

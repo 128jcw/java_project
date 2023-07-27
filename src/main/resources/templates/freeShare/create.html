@@ -1,0 +1,136 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_freeshare }">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+<style>
+@font-face {
+    font-family: 'Tenada';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+   font-family: 'Tenada';
+}
+
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid my-2">
+        <div class="card bg-light">
+            <div class="card-header m-1 p-2 display-2" style="color: rgb(255, 128, 0);">
+                <h1>상품 등록!</h1>
+            </div>
+        
+            <div class="card-body bg-light">
+                <form id="formbtn" method="post" enctype="multipart/form-data">
+                    <div class="my-4">
+                        <label for="title" class="form-label" style="font-size:148%">◎ 제목 </label> 
+                        <input id="title" name="title" class="form-control" type="text" required autofocus />
+                    </div>
+                    <div class="my-4">
+                        <label for="content" class="form-label" style="font-size:148%">◎ 내용</label>
+                        <textarea id="content" class="form-control" name="content" required></textarea>
+                    </div>
+                    <div class="my-4">
+                        <label for="filePath" class="form-label" style="font-size:148%">◎ 제품 사진 올리기</label> 
+                        <input id="filePath" name="filePath" class="form-control"  type="file" value="파일선택" required />
+                    </div> 
+                    <div class="my-4">
+                        <label for="price" class="form-label" style="font-size:148%">◎ 가격</label>
+                        <input type="text" maxlength="10" onkeyup="inputNumberFormat(this)" id="price" class="form-control" name="price" required />
+                    </div>
+                    <div class="my-4">
+                        <label for="author" class="form-label" style="font-size:148%">◎ 작성자</label> 
+                        <input id="author" name="author" class="form-control" type="text" th:value="${ #authentication.name }" readonly />
+                    </div>
+        
+                    <div class="btn-group" id="btnGroup" role="group" aria-label="Basic checkbox toggle button group" >
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="transaction" id="direct" value="direct" autocomplete="off"/> 
+                            <label class="form-check-label" for="direct" style="font-size:148%"> 직거래 </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="transaction" id="parcel" value="parcel" autocomplete="off" /> 
+                            <label class="form-check-label" for="parcel" style="font-size:148%"> 택배거래 </label>
+                        </div>
+                    </div> 
+        
+                    <div id="btnRegister" class="my-5" >
+                        <input type="submit" value="상품 등록" class="form-control btn btn-success" />
+                    </div>
+                </form>
+            </div>
+        
+        </div>
+    </div>
+</div>
+<th:block script layout:fragment="script">
+    <script type="text/javascript">
+    
+    const check = document.querySelector('.btn-group');
+    const checkboxes = check.querySelectorAll('input');
+    const formbtn = document.querySelector('#formbtn');
+    
+    const btnRegister = document.querySelector('#btnRegister');
+    
+    btnRegister.addEventListener('click', (e)=>{
+        e.preventDefault();
+        updatePost();
+    });
+    
+    function updatePost(seq){
+        if(checkboxes[0].checked === true || checkboxes[1].checked === true){ 
+            formbtn.submit();
+            return;}
+        else{
+            Swal.fire({
+                  title: '필수 항목들은 전부 기입해주세요!',
+                  icon: 'warning',
+                  confirmButtonColor: 'orange',
+                  confirmButtonText: '확인',
+                }).then((result) => {if (result.value) {}})
+            }        
+    }
+    
+    function inputNumberFormat(obj) {
+        obj.value = comma(uncomma(obj.value));
+    }
+    
+    function uncomma(str) {
+        str = String(str);
+        return str.replace(/[^\d]+/g, '');
+    } 
+        
+    function comma(str) {
+        str = String(str);
+        return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+    }
+    
+    function inputOnlyNumberFormat(obj) {
+        obj.value = onlynumber(uncomma(obj.value));
+    }
+        
+    function onlynumber(str) {
+        str = String(str);
+        return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g,'$1');
+    }
+        
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</th:block>
+</body>
+</html>

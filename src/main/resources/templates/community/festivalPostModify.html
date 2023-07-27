@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{ layout/layout_community }">
+
+    <div layout:fragment="content">
+        <div class="card my-2">
+            <div class="card-header">
+                <h1>포스트 수정 페이지</h1>
+            </div>
+            <div class="card-body">
+                <form id="formModify" method="post" enctype="multipart/form-data">
+                    <div class="my-2">
+                        <label for="id" class="form-label">포스트 번호</label>
+                        <input id="id" class="form-control" 
+                            name="id" th:value="${ festivalPost.id }" readonly />
+                    </div>
+                    <div class="select_img">
+                        <img id="imgFileImg" th:src="${festivalPost.filePath}" th:if="${festivalPost.filePath} != null" class="card-img-top card-img"/>
+                        <input id="imgFile" name="imgFile" class="form-control" type="file" accept="image/*" required />
+                    </div>
+                    <div class="my-2">
+                        <label for="title" class="form-label">포스트 제목</label>
+                        <input id="title" class="form-control" 
+                            name="title" th:value="${ festivalPost.title }" autofocus />
+                    </div>
+                    <div class="my-2">
+                        <label for="content" class="form-label">포스트 내용</label>
+                        <textarea id="content" class="form-control" 
+                            name="content" th:text="${ festivalPost.content }"></textarea>
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalArea" class="form-label">개최지역</label>
+                        <input id="festivalArea" class="form-control" 
+                            name="festivalArea" th:value="${ festivalPost.festivalArea }" />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalPeriod" class="form-label">개최기간</label>
+                        <input id="festivalPeriod" class="form-control" 
+                            name="festivalPeriod" th:value="${ festivalPost.festivalPeriod }" />
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalCharacter" class="form-label">축제 성격</label>
+                        <input id="festivalCharacter" class="form-control" 
+                            name="festivalCharacter" th:value="${ festivalPost.festivalCharacter }"/>
+                            
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalInfo" class="form-label">관련 누리집</label>
+                        <input id="festivalInfo" class="form-control" 
+                            name="festivalInfo" th:value="${ festivalPost.festivalInfo }" />
+                       
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalPlace" class="form-label">축제 장소</label>
+                        <input id="festivalPlace" class="form-control" 
+                            name="festivalPlace" th:value="${ festivalPost.festivalPlace }"/>
+                    
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalPrice" class="form-label">요금</label>
+                        <input id="festivalPrice" class="form-control" 
+                            name="festivalPrice" th:value="${ festivalPost.festivalPrice }"/>
+                       
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalAgency" class="form-label">주최/주관기관</label>
+                        <input id="festivalAgency" class="form-control" 
+                            name="festivalAgency" th:value="${ festivalPost.festivalAgency }" />
+                           
+                    </div>
+                    <div class="my-2">
+                        <label for="festivalInquiry" class="form-label">문의</label>
+                        <input id="festivalInquiry" class="form-control" 
+                            name="festivalInquiry" th:value="${ festivalPost.festivalInquiry }"/>
+                        
+                    </div>
+                </form>
+                <div class="my-2">
+                    <button class="btn btn-danger" id="btnDelete">삭제</button>
+                    <button class="btn btn-success" id="btnUpdate">수정 완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script layout:fragment="script">
+    // form HTML 요소를 찾음.
+    const formModify = document.querySelector('#formModify');
+    
+    // 삭제 버튼 찾아서 이벤트 리스너 등록.
+    const btnDelete = document.querySelector('#btnDelete');
+    btnDelete.addEventListener('click', function () {
+    	const result = confirm('정말 삭제?');
+    	if (result) {
+    		formModify.action = '/community/festivalPostDelete';
+    		formModify.method = 'post';
+    		formModify.submit();
+    	}
+    });
+    
+    // 수정 완료 버튼 찾아서 이벤트 리스너 등록.
+    const btnUpdate = document.querySelector('#btnUpdate');
+    btnUpdate.addEventListener('click', function () {
+    	
+    	const title = document.querySelector('#title').value;
+    	const content = document.querySelector('#content').value;
+    	const imgFile = document.querySelector('#imgFile').value;
+    	
+    	
+        if(imgFile == '') {	
+        	if(title == '' || content == '') {
+        		alert('제목과 내용은 반드시 입력.');
+        		return;
+        	}
+    	
+    	const result = confirm('수정 하시겠습니까?');
+    	if (result) {
+    		formModify.action = '/community/festivalPostUpdate';
+    		formModify.method = 'post';
+    		formModify.submit();
+    	}
+    }   else {
+    	   if(title == '' || content == '') {
+            alert('제목과 내용을 입력하세요')
+            return;
+        }
+        
+        const result = confirm('수정하시겠습니까?');
+        if(result) {
+            console.log("updatImg")
+            formModify.action='/community/festivalPostUpdateImg';
+            formModify.method='post';
+            formModify.submit();
+        }
+    
+    
+}
+   
+    })
+    </script>
+
+</html>

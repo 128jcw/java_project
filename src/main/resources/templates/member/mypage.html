@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html 
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{ layout/layout.html }">
+    
+<body>
+    <div layout:fragment="content">
+        <div class="card m-1" style="border: none">
+        
+        <form id="formModify" style="margin-top: 4px;" enctype="multipart/form-data">
+        
+            <div class="card-head" style="text-align:center;">
+                <h1 style="font-size: 330%; margin-right: 50px; margin-left: 50px; margin-top: 50px;"> 마이페이지 </h1>
+            </div>
+            <div class="card-body" style="margin-left: 50px; margin-right: 50px;">
+                <br/>
+                <div class="card" style="padding: 50px; border: none; ">
+                <h3 style="font-size: 220%;"><span style="font-size: 77%; color: orange;">◎</span> 내가 만든 모임 목록</h3>
+                <table class="table table-hover">
+                    <thead class="bg bg-dark rounded">
+                        <tr style="color:orange;">
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>총인원</th>
+                            <th>작성자</th>
+                            <th>모임날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post : ${ recruitPostList }">
+                            <td th:text="${post.id}"></td>
+                            <td><a style="text-decoration-line: none; color: black;"
+                                th:href="@{ /post/detail?id={id} (id = ${post.id}) }"
+                                th:text="${post.title}"></a></td>
+                            <td th:text="${post.totalMember}"></td>
+                            <td th:text="${post.author}"></td>
+                            <td th:text="${ #temporals.format(post.meetingDate, 'yyyy-MM-dd HH:mm') }"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <br/>
+                <div class="card" style="padding: 50px; border: none; ">
+                <h3 style="font-size: 220%;"><span style="font-size: 77%; color: orange;">◎</span> 나눔 게시판에 올린 물건 목록</h3>
+                <table class="table table-hover">
+                    <thead class="bg bg-dark rounded">
+                        <tr style="color:orange;">
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post2 : ${ freeSharePostList }">
+                            <td th:text="${post2.id}"></td>
+                            <td><a style="text-decoration-line: none; color: black;"
+                                th:href="@{ /freeshare/detail?id={id} (id = ${post2.id}) }"
+                                th:text="${post2.title}"></a></td>
+                            <td th:text="${post2.author}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <br/>
+                <div class="row" style="margin:0px;">
+                    <div class="card col-6" style="padding: 50px; border: none; ">
+                    <div>
+                        <h3 style="font-size: 200%; float: left;"><span style="font-size: 77%; color: orange;">◎</span> 내가 지원한 모임 내역</h3>
+                        <a  id="newPost" style="margin-top:15px; float:right; text-decoration: none; color: black;" th:href="@{/reviewPost/create}">모임 후기 작성</a>
+                     </div>
+                        <table class="table table-hover">
+                            <thead class="bg bg-dark rounded">
+                                <tr style="color:orange;">
+                                    <th>지원한 글 제목</th>
+                                    <th>작성자</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="post3 : ${ applyRecruitPostList }">
+                                    <td><a style="text-decoration-line: none; color: black;"
+                                        th:href="@{ /post/detail?id={id} (id = ${post3.id}) }"
+                                        th:text="${post3.title}"></a></td>
+                                    <td th:text="${post3.author}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card col-6" style="padding: 50px; border: none;">
+                         <h3 style="font-size: 200%;"><span style="font-size: 77%; color: orange;">◎</span> 관심글 내역</h3>
+                            <table class="table table-hover">
+                                <thead class="bg bg-dark rounded">
+                                    <tr style="color:orange;">
+                                        <th>관심 글 제목</th>
+                                        <th>작성자</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="post4 : ${likecountPostList}">
+                                        <td><a style="text-decoration-line: none; color: black;"
+                                         th:href="@{ /post/detail?id={id} (id= ${post4.id}) }" th:text="${post4.title}"></a></td>
+                                        <td><a style="text-decoration-line: none; color: black;"
+                                         th:href="@{ /post/detail?id={id} (id= ${post4.id}) }" th:text="${post4.author}"></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            <br/>
+                <ul style="list-style: none;">
+                    <li class="nav-item active p-2" style="float: left; text-align: right;">
+                        <a id="point" style="font-size: 20px; text-decoration: none; color: orange;" th:href="@{ /member/update }"> 개인정보 변경</a>
+                    </li>
+                    <li class="nav-item active p-2" style="float: left; text-align: right; margin-left: 20px;">
+                        <a id="point" style="font-size: 20px; text-decoration: none; color: green;" th:href="@{ /member/passwordUpdate }"> 비밀번호 변경</a>
+                    </li>
+                </ul>
+                <input style="float: right; " class="btn btn-outline-danger" type="button" onclick="deleteMember()" value="회원 탈퇴" />
+            </div>
+           </form>
+            
+        </div>
+        <br/><br/>
+
+<!--  
+    <script>
+    let point = document.getElementById("point"); 
+    
+    point.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    point.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false); 
+
+    
+    </script> -->
+    
+        
+    </div><!-- fragement: content -->
+    
+    <th:block layout:fragment="script">
+        <script>
+    let point = document.getElementById("point"); 
+    
+    point.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    point.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false);
+
+    
+    </script>
+    
+        <script>
+        
+        function deleteMember(seq) {
+            Swal.fire({
+                title: '탈퇴하시겠습니까?',
+                showCancelButton: true,
+                confirmButtonColor: 'red',
+                cancelButtonColor: 'gray',
+                confirmButtonText: '탈퇴',
+                cancelButtonText: '취소'
+              }).then((result) => {
+                if (result.value) {
+                   formModify.action='/member/delete';
+                    formModify.method='post';
+                    formModify.submit();
+                }
+              })
+        }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    </th:block>
+</body>
+</html>

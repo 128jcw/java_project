@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+    crossorigin="anonymous">
+    <style> /* map 관련 css(지우면 에러나요!) */
+			.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;font-weight:bold;}
+			.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+			.map_wrap {position:relative;width:100%;height:1000px;}
+			#menu_wrap {position:absolute;top:0;left:0;bottom:0;height:90%; width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(180, 180, 180, 0.9);z-index: 1;font-size:12px;border-radius: 10px;}
+			.bg_white {background:#fff;}
+			#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+			#menu_wrap .option{text-align: center;}
+			#menu_wrap .option p {margin:10px 0;}  
+			#menu_wrap .option button {margin-left:5px;}
+			#placesList li {list-style: none;}
+			#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+			#placesList .item span {display: block;margin-top:4px;}
+			#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+			#placesList .item .info{padding:10px 0 10px 55px;}
+			#placesList .info .gray {color:#8a8a8a;}
+			#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+			#placesList .info .tel {color:#009900;}
+			#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
+			#placesList .item .marker_1 {background-position: 0 -10px;}
+			#placesList .item .marker_2 {background-position: 0 -56px;}
+			#placesList .item .marker_3 {background-position: 0 -102px}
+			#placesList .item .marker_4 {background-position: 0 -148px;}
+			#placesList .item .marker_5 {background-position: 0 -194px;}
+			#placesList .item .marker_6 {background-position: 0 -240px;}
+			#placesList .item .marker_7 {background-position: 0 -286px;}
+			#placesList .item .marker_8 {background-position: 0 -332px;}
+			#placesList .item .marker_9 {background-position: 0 -378px;}
+			#placesList .item .marker_10 {background-position: 0 -423px;}
+			#placesList .item .marker_11 {background-position: 0 -470px;}
+			#placesList .item .marker_12 {background-position: 0 -516px;}
+			#placesList .item .marker_13 {background-position: 0 -562px;}
+			#placesList .item .marker_14 {background-position: 0 -608px;}
+			#placesList .item .marker_15 {background-position: 0 -654px;}
+			#pagination {margin:10px auto;text-align: center;}
+			#pagination a {display:inline-block;margin-right:10px;}
+			#pagination .on {font-weight: bold; cursor: default;color:#777;}
+		</style>
+        <style>
+@font-face {
+    font-family: 'Tenada';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+   font-family: 'Tenada';
+}
+
+</style>
+
+<title>같은 취향을 가진 사람들의 가치</title>
+<link rel="icon" type="image/x-icon" th:href="@{ /assets/favicon_1.ico }" />
+</head>
+<!-- nav bar  -->
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <div class="container-fluid row">
+        <div class="bg-dark pt-3 pb-3 px-5 col-sm-2">
+            <div class="ml-5">
+                <a th:href="@{ / }">
+                    <svg id="Layer_1" width="70" height="70" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 481.49 228.55">
+                        <defs><style>.cls-1{fill:#fd9409;}.cls-2{fill:none;stroke:#fd9409;stroke-miterlimit:10;stroke-width:20px;}.cls-3{fill:#f3ad14;}</style></defs>
+                        <path class="cls-1" d="M103.12,70.23q-2.91.3-2.91-2.91V53.5a2.57,2.57,0,0,1,2.91-2.91,105,105,0,0,0,14-1.46A56.83,56.83,0,0,0,129,45.86a34.36,34.36,0,0,0,8.66-5,14.76,14.76,0,0,0,4.8-6.48H100.94A2.57,2.57,0,0,1,98,31.52V18.13a2.57,2.57,0,0,1,2.91-2.91h67.67q3.06,0,3.06,3.06V28a32.42,32.42,0,0,1-3.06,14.41,34.87,34.87,0,0,1-8.22,10.84,47.91,47.91,0,0,1-12,7.71A86.82,86.82,0,0,1,134,66.09,115.71,115.71,0,0,1,118.4,69Q110.39,69.94,103.12,70.23Zm26.63,28.24h74.37a2.57,2.57,0,0,1,2.91,2.91v6a2.57,2.57,0,0,1-2.91,2.91H129.75v6.4h76.7a2.57,2.57,0,0,1,2.91,2.91v9.32a2.57,2.57,0,0,1-2.91,2.91H105.16a2.57,2.57,0,0,1-2.91-2.91V80.42a2.57,2.57,0,0,1,2.91-2.91h100a2.57,2.57,0,0,1,2.91,2.91V89.3a2.57,2.57,0,0,1-2.91,2.91H129.75Zm54.43-28.38c-2,0-3.05-1-3.05-2.91V16.82a2.7,2.7,0,0,1,3.05-3.05H205q3.06,0,3.06,3.05V29.05h6.84c1.94,0,2.91,1,2.91,3.05V49.28a2.57,2.57,0,0,1-2.91,2.91h-6.84v15q0,2.91-3.06,2.91Z"/><path class="cls-1" d="M228.13,104.58q-3,0-3-3.2V88.14c0-1.94,1-2.92,3-2.92h45q10.77,0,21-.87a73,73,0,0,0,18.34-3.78V16.82q0-3,3.06-3.05h20.81a2.7,2.7,0,0,1,3.05,3.05V129.61c0,1.94-1,2.91-3.05,2.91H315.46q-3.06,0-3.06-2.91V97.45a67.16,67.16,0,0,1-14.92,4.66,135.43,135.43,0,0,1-19,2.33v25a2.57,2.57,0,0,1-2.91,2.91h-19.5a2.57,2.57,0,0,1-2.91-2.91V104.58Zm2-82.08q0-2.91,3.06-2.91h19.94V12.46c0-2,1-3.06,3.05-3.06h20.09q3.19,0,3.2,3.06v7.13h18.92c2,0,3.05,1,3.05,2.91V35.16c0,1.94-1,2.91-3.05,2.91H281.25L255.79,74.89a3.51,3.51,0,0,1-3.64,2.33H231a2.71,2.71,0,0,1-2.4-1,2.51,2.51,0,0,1,.08-2.54l24-35.66h-19.5q-3.06,0-3.06-2.91Zm50.07,53.85a4,4,0,0,1-2.19-.66A6.14,6.14,0,0,1,276.31,74l-6-8.3a3,3,0,0,1,0-3.93L279.8,48q1.89-2.76,3.93,0l17.9,24.88a2.4,2.4,0,0,1,.58,2.41,2,2,0,0,1-2,1.09Z"/><path class="cls-2" d="M401.88,107.06a50.17,50.17,0,1,0,23.6-96.25h0c0,114.73-93,207.74-207.74,207.74S10,125.54,10,10.81"/>
+                        <path class="cls-3" d="M124.71,58.05c3.21,0,3.22-5,0-5s-3.23,5,0,5Z"/>
+                    </svg>
+                </a>
+            </div>
+            <div>
+                <span style="color: #FBECD8; font-size:100%;">'같'은 '취'향을 가진 </span>
+            </div>
+            <div>
+                <span style="color: #FBECD8; font-size:100%;">사람들의 '가치'</span>
+            </div>
+        </div>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class=" col-sm-6 collapse navbar-collapse" id="navbarSupportedContent" style="text-align: left; padding: 0;" >
+            <ul style="list-style :none; " class="navbar-nav me-auto" >
+                <li class="nav-item" style="margin-right: 10px; margin-top: 6px;">
+                <svg style="text-decoration: none; color: orange;" xmlns="http://www.w3.org/2000/svg" width="31" height="30" fill="currentColor" class="bi bi-bag-heart-fill" viewBox="-7 8 24 6">
+                  <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                </svg>
+                </li>
+                <li class="nav-item" style="margin-right: 10px; margin-top: 6px;">
+                    <a id="menu1" th:href="@{ / }" style="text-decoration: none; color: orange; font-size: 140%;">Home</a>
+                </li>
+                <li class="nav-item" style="margin-right: 10px;  margin-top: 6px;">
+                    <a id="menu2" th:href="@{ /post/list }" style="text-decoration: none; color: orange; font-size: 140%;">모집</a>
+                </li>
+                <li class="nav-item" style="margin-right: 10px; margin-top: 6px;">
+                    <a id="menu3" th:href="@{/freeshare/list}" style="text-decoration: none; color: orange; font-size: 140%;">나눔</a>
+                </li>
+                <li class="nav-item" style="margin-right: 10px; margin-top: 6px;">
+                    <a id="menu4" th:href="@{ /community/festivalPostList }" style="text-decoration: none; color: orange; font-size: 140%;">행사</a>
+                </li>
+                <li class="nav-item" style="margin-right: 10px; margin-top: 6px;">
+                    <a id="menu5" th:href="@{ /map/main }" style="text-decoration: none; color: orange; font-size: 140%;">지도</a>
+                </li>
+                <li class="nav-item" style="margin-right: 10px; ">
+                    <a id="menu_review" th:href="@{ /reviewPost/list }" style="text-decoration: none; color: orange; font-size: 180%;">'후기'</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-2" style="text-align: left;">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul style="list-style :none;" class="navbar-nav" >
+                    <th:block sec:authorize="isAnonymous()">
+                        <li class="nav-item"  style="margin-right: 10px;">
+                            <a id="menu6" style="text-decoration:none; color: orange; font-size:100%;" th:href="@{ /login }">◎ 로그인</a>
+                        </li>            
+                        <li class="nav-item">
+                            <a id="menu7" style="text-decoration:none; color: orange; font-size:100%;" th:href="@{/member/signup}">◎ 회원가입</a>
+                        </li>
+                    </th:block>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li id="menu6" class="nav-item" style="margin-right: 10px;">
+                            <a th:href="@{ /member/mypage }" style="text-decoration:none; color: orange; font-size:100%;">◎
+                                <span style="color:#FBECD8;" sec:authentication="name"></span>님, 마이페이지 </a>
+                        </li>
+                        <li style="margin-right: 10px;">
+                            <a id="menu7" style="text-decoration:none; color: orange; font-size:100%;" th:href="@{/logout}">◎ 로그아웃</a>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<body>
+    <header> 
+    </header>
+    <!-- Navigation-->
+    <!--/* 메인컨텐트 */-->
+    <div class="container-fluid row" >
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10" layout:fragment="content"></div>
+        <div class="col-sm-1"></div>
+    </div>
+
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+    <!-- Core theme JS-->
+    <script th:src="@{ /js/scripts.js }"></script>
+    
+    <!-- 페이지에 필요한 JS를 삽입할 위치 -->
+    <th:block layout:fragment="script"></th:block>
+    <script>
+    let menu1 = document.getElementById("menu1"); 
+    let menu2 = document.getElementById("menu2");
+    let menu3 = document.getElementById("menu3");
+    let menu4 = document.getElementById("menu4");
+    let menu5 = document.getElementById("menu5");
+    let menu6 = document.getElementById("menu6");
+    let menu7 = document.getElementById("menu7");
+    let menu_review = document.getElementById("menu_review");
+    
+    menu1.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu1.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false)
+      
+    menu2.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu2.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false)
+      
+    menu3.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu3.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false)
+    
+    menu4.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu4.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false)
+      
+    menu5.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu5.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false)
+        menu6.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu6.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false);      
+    
+    menu7.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu7.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false);   
+    menu_review.addEventListener("mouseover", function (event) {
+        event.target.style.color = "gold";
+      }, false);
+    menu_review.addEventListener("mouseout", function(event){
+        event.target.style.color = "orange";
+      }, false);   
+    
+      
+    </script>
+</body>
+</html>
